@@ -53,12 +53,12 @@ var loadSvg = function(url) {
     './svg/turtle.svg',
     './svg/wine.svg',
 ]).forEach(function(path, i) { 
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 20; i++) {
         loadSvg(path).then(function(root) {
             var color = Common.choose(['#f19648', '#f5d259', '#f55a3c', '#063e7b', '#ececd1']);
-            var vertexSets = select(root, 'path').map(function(path) { return Vertices.scale(Svg.pathToVertices(path), 5, 5); });
-            var xstart = (WIDTH/2)+(Math.random()*(WIDTH-200))-(WIDTH/2)-100
-            var ystart = (Math.random()*400)-200
+            var vertexSets = select(root, 'path').map(function(path) { return Vertices.scale(Svg.pathToVertices(path, 30), 5, 5); });
+            var xstart = (WIDTH/2)+(Math.random()*(WIDTH-200))-((WIDTH-100)/2)
+            var ystart = (Math.random()*1000)-2000
             Composite.add(engine.world, Bodies.fromVertices(xstart, ystart, vertexSets, {
                 render: {
                     fillStyle: color,
@@ -77,14 +77,17 @@ draw();
 var ypos = 600
 var test = 0
 var count = 0
+
+const SHAKEAMT = 3
+
 function draw(){
     offset = Math.sin(count) * 20
-    if (test > 10 && test < 500) {
+    if (test > 10 && test < 1000) {
         // Matter.Body.setPosition(ground, {x: 400, y: ypos+offset})
-        Matter.Body.setVelocity(ground, {x:0, y:-10})
-        Matter.Body.setVelocity(wallLeft, {x:5, y:0})
-        Matter.Body.setVelocity(wallRight, {x:-5, y:0})
-    } else if (test >= 500) {
+        Matter.Body.setVelocity(ground, {x:0, y:-SHAKEAMT*2})
+        Matter.Body.setVelocity(wallLeft, {x:SHAKEAMT, y:0})
+        Matter.Body.setVelocity(wallRight, {x:-SHAKEAMT, y:0})
+    } else if (test >= 1000) {
         Matter.Body.setVelocity(ground, {x:0, y:0})
         Matter.Body.setVelocity(wallLeft, {x:0, y:0})
         Matter.Body.setVelocity(wallRight, {x:0, y:0})
